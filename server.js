@@ -19,13 +19,14 @@ function originIsAllowed(origin) {
   return origin == "https://dashbot0013.herokuapp.com"
 }
 
-var connection = request.accept('DBCP', request.origin);
-    console.log((new Date()) + ' Connection accepted.');
-    connection.on('message', function(message) {
-        console.log('Received Message: ' + message.utf8Data);
-        connection.sendUTF(message.utf8Data);
+client.on('connect', function(connection) {
+  var connection = request.accept('DBCP', request.origin);
+  console.log((new Date()) + ' Connection accepted.');
+  connection.on('message', function(message) {
+    console.log('Received Message: ' + message.utf8Data);
+      connection.sendUTF(message.utf8Data);
     });
     connection.on('close', function(reasonCode, description) {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+      console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
     });
 });
