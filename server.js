@@ -21,7 +21,7 @@ socket.on('request', function(request) {
 
     socket.on('connect', async function(connection) {
       var connection = request.accept('DBCP', request.origin);
-      await sleep(5000);
+      console.log(connection);
       connection.sendUTF("TOKEN IS " + process.env.localtoken, function(err, res) {
         if(err) throw err;
         console.log(res);
