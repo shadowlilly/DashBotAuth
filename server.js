@@ -17,7 +17,7 @@ socket = new webServer({
 
 socket.on('request', function(request) {
 
-    connection = request.accept("DBCP", request.origin).catch(function(err) {
+    connection = request.accept("DBCP").catch(function(err) {
       console.log("Connect failed - " + err);
     })
 
