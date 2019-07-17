@@ -12,7 +12,7 @@ var server = http.createServer(function (request, response) {
 
 socket = new webServer({
     httpServer: server,
-    autoAcceptConnections: true
+    autoAcceptConnections: false
 });
 
 socket.on('request', function(request) {
