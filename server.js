@@ -19,6 +19,10 @@ socket.on('request', function(request) {
 
     connection = request.accept("DBCP", request.origin);
 
+    connection.on("error", function(error) {
+      console.log(error);
+    });
+
     connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'");
     console.log((new Date()) + ' Connection accepted.');
 
