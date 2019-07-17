@@ -20,12 +20,8 @@ function originIsAllowed(origin) {
 }
 
 socket.on('request', function(request) {
-    if (!originIsAllowed(request.origin)) {
-      // Make sure we only accept requests from an allowed origin
-      request.reject();
-      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
-      return;
-    }
+
+    console.log(request);
 
     socket.on('connect', function(connection) {
       var connection = request.accept('DBCP', request.origin);
