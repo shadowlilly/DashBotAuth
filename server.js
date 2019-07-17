@@ -19,7 +19,7 @@ socket.on('request', function(request) {
 
     console.log(request.requestedProtocols);
 
-    connection = request.accept("DBCP", "DBCP");
+    connection = request.accept("dbcp_key-" + process.env.socketkey, request.origin);
 
     connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'");
     console.log((new Date()) + ' Connection accepted.');
