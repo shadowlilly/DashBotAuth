@@ -12,14 +12,12 @@ var server = http.createServer(function (request, response) {
 
 socket = new webServer({
     httpServer: server,
-    autoAcceptConnections: false
+    autoAcceptConnections: true
 });
 
-function originIsAllowed(origin) {
-  return origin == "https://dashbot0013.herokuapp.com"
-}
-
 socket.on('request', function(request) {
+
+    var connection = request.accept('DBCP', request.origin);
 
     socket.on('connect', function(connection) {
       var connection = request.accept('DBCP', request.origin);
