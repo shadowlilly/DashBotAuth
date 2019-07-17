@@ -21,8 +21,6 @@ function originIsAllowed(origin) {
 
 socket.on('request', function(request) {
 
-    console.log(request);
-
     socket.on('connect', function(connection) {
       var connection = request.accept('DBCP', request.origin);
       console.log((new Date()) + ' Connection accepted.');
