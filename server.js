@@ -17,7 +17,7 @@ socket = new webServer({
 
 socket.on('request', function(request) {
 
-    var connection = request.accept('DBCP-KEY=' + process.env.socketkey, request.origin);
+    var connection = request.accept('DBCP-KEY_' + process.env.socketkey, request.origin);
 
     socket.on('connect', function(connection) {
       var connection = request.accept('DBCP', request.origin);
