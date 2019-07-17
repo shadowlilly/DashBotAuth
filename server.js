@@ -5,7 +5,7 @@ var webServer = require('websocket').server;
 
 var server = http.createServer(function (request, response) {
 
-  response.writeHead(101);
+  response.writeHead(404);
   response.end();
 
 }).listen(process.env.PORT);
