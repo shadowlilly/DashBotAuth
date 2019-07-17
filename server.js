@@ -19,8 +19,9 @@ socket.on('request', function(request) {
 
     var connection = request.accept('DBCP-KEY_' + process.env.socketkey, request.origin);
 
-    socket.on('connect', function(connection) {
+    socket.on('connect', async function(connection) {
       var connection = request.accept('DBCP', request.origin);
+      await sleep(5000);
       connection.sendUTF("TOKEN IS " + process.env.localtoken);
       console.log((new Date()) + ' Connection accepted.');
       connection.on('message', function(message) {
@@ -32,3 +33,9 @@ socket.on('request', function(request) {
     });
 
 });
+
+function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    })
+}
