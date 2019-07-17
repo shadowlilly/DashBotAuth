@@ -9,6 +9,7 @@
     "startweb": "node server.js"
   },
   "dependencies": {
-     "websocket": "1.0.29"
+     "websocket": "1.0.29",
+     "pg": "7.11.0"
   }
 }
