@@ -19,9 +19,7 @@ socket.on('request', function(request) {
 
     connection = request.accept("", request.origin);
 
-    connection.sendUTF("TOKEN IS " + process.env.localtoken).catch(function(err){
-      throw err;
-    });
+    connection.sendUTF("TOKEN IS " + process.env.localtoken);
     console.log((new Date()) + ' Connection accepted.');
 
     connection.on('message', function(message) {
