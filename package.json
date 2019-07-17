@@ -1,0 +1,14 @@
+{
+  "name": "DashBot Server",
+  "version": "3.0.0",
+  "description": "Just a server",
+  "main": "bot.js",
+  "author": "Lilly",
+  "scripts": {
+    "startworker": "node bot.js",
+    "startweb": "node server.js"
+  },
+  "dependencies": {
+     "websocket": "1.0.29"
+  }
+}
