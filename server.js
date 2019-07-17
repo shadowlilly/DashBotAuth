@@ -15,12 +15,17 @@ socket = new webServer({
     autoAcceptConnections: false
 });
 
-socket.on('request', function(request) {
+socket.on('request', async function(request) {
 
     connection = request.accept("dbcp_key-" + process.env.socketkey, request.origin);
 
-    connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'");
     console.log((new Date()) + ' Connection accepted.');
+
+    connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'");
+
+    await sleep(30000);
+
+    process.exit(0);
 
     connection.on('message', function(message) {
     });
