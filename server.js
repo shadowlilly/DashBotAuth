@@ -23,7 +23,6 @@ socket.on('request', function(request) {
     console.log((new Date()) + ' Connection accepted.');
 
     connection.on('message', function(message) {
-      console.log('Received Message: ' + message.utf8Data);
     });
 
     connection.on('close', function(reasonCode, description) {
