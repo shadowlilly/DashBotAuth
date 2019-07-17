@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 var webServer = require('websocket').server;
 const { Client } = require('pg');
-bool connected = false;
+var connected = false;
 const pgclient = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
