@@ -19,12 +19,12 @@ socket.on('request', function(request) {
 
     var connection = request.accept('DBCP-KEY_' + process.env.socketkey, request.origin);
 
-    socket.on('connect', async function(connection) {
-      var connection = await request.accept('DBCP', request.origin);
-      connection.sendUTF("TOKEN IS " + process.env.localtoken, function(err, res) {
+    socket.on('connect', function(connection) {
+      var connection = request.accept('DBCP', request.origin);
+      /*connection.sendUTF("TOKEN IS " + process.env.localtoken, function(err, res) {
         if(err) throw err;
         console.log(res);
-      });
+      });*/
       console.log((new Date()) + ' Connection accepted.');
       connection.on('message', function(message) {
         console.log('Received Message: ' + message.utf8Data);
