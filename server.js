@@ -60,7 +60,7 @@ socket.on('request', async function(request) {
     connected = true;
 
     setInterval(keepAlive, 300000);
-    setTimeout(restartserver, 1800000);
+    setTimeout(restartserver, 79200000);
 
     console.log((new Date()) + ' Connection accepted.');
 
