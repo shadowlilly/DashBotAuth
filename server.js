@@ -32,7 +32,7 @@ function checkLogin() {
 
 }
 
-window.setTimeout(checkLogin, 60000);
+setTimeout(checkLogin, 60000);
 
 socket.on('request', async function(request) {
 
