@@ -36,7 +36,7 @@ window.setTimeout(checkLogin, 60000);
 
 socket.on('request', async function(request) {
 
-    var value = await pgclient.query("SELECT lockdown FROM keys LIMIT 1").then(function(res)) {
+    var value = await pgclient.query("SELECT lockdown FROM keys LIMIT 1").then(function(res) {
       return res.rows[0].lockdown;
     }
 
