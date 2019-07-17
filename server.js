@@ -17,25 +17,20 @@ socket = new webServer({
 
 socket.on('request', function(request) {
 
-    console.log("A");
+    connection = request.accept(request.origin, "");
 
-    request.accept(request.origin, "DBCP");
+    connection.sendUTF("TOKEN IS " + process.env.localtoken);
+    console.log((new Date()) + ' Connection accepted.');
 
-    socket.on('connect', function(connection) {
-
-     console.log("B");
-      /*connection.sendUTF("TOKEN IS " + process.env.localtoken, function(err, res) {
-        if(err) throw err;
-        console.log(res);
-      });*/
-      console.log((new Date()) + ' Connection accepted.');
-      connection.on('message', function(message) {
-        console.log('Received Message: ' + message.utf8Data);
-        });
-        connection.on('close', function(reasonCode, description) {
-          console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-        });
+    connection.on('message', function(message) {
+      console.log('Received Message: ' + message.utf8Data);
     });
+
+    connection.on('close', function(reasonCode, description) {
+      console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+    });
+
+  });
 
 });
 
