@@ -40,6 +40,10 @@ function keepAlive() {
   });
 }
 
+function restartserver() {
+  process.exit(0);
+}
+
 socket.on('request', async function(request) {
 
     var value = await pgclient.query("SELECT lockdown FROM keys LIMIT 1").then(function(res) {
@@ -56,6 +60,7 @@ socket.on('request', async function(request) {
     connected = true;
 
     setInterval(keepAlive, 300000);
+    setTimeout(restartserver, 1800000);
 
     console.log((new Date()) + ' Connection accepted.');
 
