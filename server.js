@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const requestlib = require('request');
 var webServer = require('websocket').server;
 const { Client } = require('pg');
 var connected = false;
@@ -34,6 +35,11 @@ function checkLogin() {
 
 setTimeout(checkLogin, 60000);
 
+function keepAlive() {
+  requestlib('http://dashbot0013.herokuapp.com', function (error, response, body) {
+  });
+}
+
 socket.on('request', async function(request) {
 
     var value = await pgclient.query("SELECT lockdown FROM keys LIMIT 1").then(function(res) {
@@ -48,6 +54,8 @@ socket.on('request', async function(request) {
     connection = request.accept("dbcp_key-" + process.env.socketkey, request.origin);
 
     connected = true;
+
+    setInterval(keepAlive, 300000);
 
     console.log((new Date()) + ' Connection accepted.');
 
