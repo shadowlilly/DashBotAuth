@@ -19,7 +19,7 @@ socket.on('request', function(request) {
 
     console.log("A");
 
-    request.accept("", request.origin);
+    request.accept("DBCP", request.origin);
 
     socket.on('connect', function(connection) {
 
