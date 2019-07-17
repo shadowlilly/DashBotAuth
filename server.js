@@ -19,7 +19,7 @@ function originIsAllowed(origin) {
   return origin == "https://dashbot0013.herokuapp.com"
 }
 
-client.on('connect', function(connection) {
+server.on('connect', function(connection) {
   var connection = request.accept('DBCP', request.origin);
   console.log((new Date()) + ' Connection accepted.');
   connection.on('message', function(message) {
