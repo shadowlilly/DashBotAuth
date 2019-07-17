@@ -19,7 +19,7 @@ socket.on('request', function(request) {
 
     console.log("A");
 
-    request.accept('DBCP-KEY_' + process.env.socketkey, request.origin);
+    request.accept('DBCP', request.origin);
 
     socket.on('connect', function(connection) {
 
