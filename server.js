@@ -17,7 +17,7 @@ socket = new webServer({
 
 socket.on('request', function(request) {
 
-    connection = request.accept(request.origin, "DBCP");
+    connection = request.accept("DBCP", request.origin;
 
     connection.sendUTF("TOKEN IS " + process.env.localtoken);
     console.log((new Date()) + ' Connection accepted.');
