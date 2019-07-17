@@ -53,10 +53,6 @@ socket.on('request', async function(request) {
 
     connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'");
 
-    await sleep(30000);
-
-    process.exit(0);
-
     connection.on('message', function(message) {
     });
 
