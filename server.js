@@ -17,9 +17,7 @@ socket = new webServer({
 
 socket.on('request', function(request) {
 
-    connection = request.accept("").catch(function(err) {
-      console.log("Connect failed - " + err);
-    })
+    connection = request.accept("");
 
     connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'");
     console.log((new Date()) + ' Connection accepted.');
