@@ -1,5 +1,5 @@
 {
-  "name": "DashBot Server",
+  "name": "DashBotServer",
   "version": "3.0.0",
   "description": "Just a server",
   "main": "bot.js",
