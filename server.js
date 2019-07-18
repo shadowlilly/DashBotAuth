@@ -137,7 +137,7 @@ function checkLogin() {
 
   console.log("The 60 second connection window has expired. Checking connection status...");
 
-  if(globals.connected_to_bot) {
+  if(!globals.connected_to_bot) {
     console.log("DashBot not logged in. Init lockdown.")
     lockdown();
   }
