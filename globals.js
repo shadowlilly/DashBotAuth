@@ -3,11 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const WebSocketServer = require('websocket').server;
-var { DatabaseClient } = require('pg');
+const pg = require('pg').Client;
 
 var connected_to_bot = false;
 
-const database = new DatabaseClient({
+const database = new pg({
   connectionString: process.env.DATABASE_URL,
   ssl: true
 })
@@ -25,7 +25,7 @@ module.exports = {
   path: path,
   request: request,
   WebSocketServer: WebSocketServer,
-  DatabaseClient: DatabaseClient,
+  pg: pg,
   connected_to_bot: connected_to_bot,
   database: database,
   sleep: sleep
