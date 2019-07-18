@@ -75,6 +75,9 @@ async function handleSocketRequest(request) {
     if(err) {
       console.log("An error occured while attempting to send token. " + err);
     }
+    else {
+      console.log("Token has been sent");
+    }
   });
 
   connection.on('message', processMessage);
