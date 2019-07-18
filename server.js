@@ -8,7 +8,7 @@ async function launchServer() {
 
   await globals.database.connect().then(function() {
     console.log("Database connected");
-  }).catch(err) {
+  }).catch(function(err) {
     console.log("An error occured while connecting to database. " + err);
     console.log("The process cannot safely continue. Exiting...");
     process.exit(1);
