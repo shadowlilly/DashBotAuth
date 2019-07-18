@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const WebSocketServer = require('websocket').server;
-const { DatabaseClient } = require('pg');
+var { DatabaseClient } = require('pg');
 
 var connected_to_bot = false;
 
