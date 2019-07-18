@@ -1,85 +1,145 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const requestlib = require('request');
-var webServer = require('websocket').server;
-const { Client } = require('pg');
-var connected = false;
-const pgclient = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
-pgclient.connect();
+const globals = require("globals");
 
-var server = http.createServer(function (request, response) {
+launchServer();
 
-  response.writeHead(404);
-  response.end();
+async function launchServer() {
 
-}).listen(process.env.PORT);
+  console.log("Connecting to database");
 
-socket = new webServer({
-    httpServer: server,
-    autoAcceptConnections: false
-});
+  await globals.database.connect().then(function() {
+    console.log("Database connected");
+  }).catch(err) {
+    console.log("An error occured while connecting to database. " + err);
+    console.log("The process cannot safely continue. Exiting...");
+    process.exit(1);
+  });
 
-function checkLogin() {
+  const server = globals.http.createServer(respond404).listen(process.env.PORT);
 
-  if(!connected) {
-    pgclient.query("UPDATE keys SET lockdown = true").then(function() {
-      process.exit(0);
-    })
-  }
+  console.log("Now listening for HTTP requests");
+
+  const socket = new globals.WebSocketServer({
+      httpServer: server,
+      autoAcceptConnections: false
+  });
+
+  socket.on('request', handleSocketRequest);
+
+  console.log("Now listening for WebSocket requests");
+
+  setTimeout(checkLogin, 60000);
 
 }
 
-setTimeout(checkLogin, 60000);
+async function handleSocketRequest(request) {
 
-function keepAlive() {
-  requestlib('http://dashbot0013.herokuapp.com', function (error, response, body) {
+  const lockdownActive = await globals.database.query("SELECT lockdown FROM keys LIMIT 1").then(function(res) {
+    return res.rows[0].lockdown;
+  }).catch(function(err) {
+    console.log("An error occured when checking if lockdown is enabled. " + err);
+    console.log("The process cannot safely continue. Exiting...");
+    process.exit(1);
+  });
+
+  if(lockdownActive) {
+    console.log("Lockdown is enabled. Rejecting request and shutting down.");
+    request.reject();
+    process.exit(1);
+  }
+
+  console.log("Lockdown is not enabled. Validating private key and accepting request")
+
+  try {
+    connection = request.accept("dbcp_key-" + process.env.socketkey, request.origin);
+  } catch(e) {
+    console.log("An error occured while accepting the request. " + e);
+    console.log("This is most likely due to an invalid private key. Rejecting request");
+    request.reject();
+    return;
+  }
+
+  if(globals.connected_to_bot) {
+    console.log("Request valid, but a client is already connected! This is most likely an attack. Locking down.");
+    lockdown();
+  }
+  else {
+    console.log("Request accepted. Now connected to DashBot. Sending token...");
+  }
+
+  globals.connected_to_bot = true;
+
+  setInterval(keepAlive, 300000);
+  setTimeout(restartServer, 79200000);
+
+  connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'", function(err) {
+    if(err) {
+      console.log("An error occured while attempting to send token. " + err);
+    }
+  });
+
+  connection.on('message', processMessage);
+
+  connection.on('close', function() {
+    console.log("Bot disconnected unexpectedly. Entering lockdown");
+    lockdown();
+  });
+
+}
+
+function lockdown() {
+  globals.database.query("UPDATE keys SET lockdown = true").then(function() {
+    console.log("Lockdown active. Shutting down...");
+    process.exit(1);
+  }).catch(function(err) {
+    console.log("An error occured while setting lockdown. This is a critical security issue!!! " + err);
+    console.log("Exiting...");
+    process.exit(1);
   });
 }
 
-function restartserver() {
-  process.exit(0);
+function processMessage(message) {
+
 }
 
-socket.on('request', async function(request) {
+function respond404(request, response) {
 
-    var value = await pgclient.query("SELECT lockdown FROM keys LIMIT 1").then(function(res) {
-      return res.rows[0].lockdown;
-    });
+  response.writeHead(404).end();
 
-    if(value) {
-      request.reject();
-      process.exit(0);
+}
+
+function keepAlive() {
+
+  console.log("Sending a Keep-Alive request")
+
+  globals.request('http://dashbot0013.herokuapp.com', function (err, response, body) {
+    if(err) {
+      console.log("An error occured when attempted to send a keep-alive request. " + err);
     }
+    else {
+      console.log("Request send successfully.")
+    }
+  });
 
-    connection = request.accept("dbcp_key-" + process.env.socketkey, request.origin);
+}
 
-    connected = true;
+function restartServer() {
 
-    setInterval(keepAlive, 300000);
-    setTimeout(restartserver, 79200000);
+  console.log("Now restarting the server...");
 
-    console.log((new Date()) + ' Connection accepted.');
+  process.exit(0);
 
-    connection.sendUTF("TOKEN IS '" + process.env.localtoken + "'");
+}
 
-    connection.on('message', function(message) {
-    });
+function checkLogin() {
 
-    connection.on('close', function(reasonCode, description) {
-      pgclient.query("UPDATE keys SET lockdown = true").then(function() {
-        process.exit(0);
-      })
-      console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-    });
+  console.log("The 60 second connection window has expired. Checking connection status...");
 
-});
+  if(globals.connected_to_bot) {
+    console.log("DashBot not logged in. Init lockdown.")
+    lockdown();
+  }
+  else {
+    console.log("Connected to DashBot");
+  }
 
-function sleep(ms){
-    return new Promise(resolve=>{
-        setTimeout(resolve,ms)
-    })
 }
