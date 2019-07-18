@@ -106,7 +106,8 @@ function processMessage(message) {
 
 function respond404(request, response) {
 
-  response.writeHead(404).end();
+  response.writeHead(404);
+  response.end();
 
 }
 
